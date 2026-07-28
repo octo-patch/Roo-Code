@@ -191,10 +191,10 @@ describe("MiniMaxHandler", () => {
 			expect(model.info).toEqual(minimaxModels[minimaxDefaultModelId])
 		})
 
-		it("should default to MiniMax-M2.7 model", () => {
+		it("should default to MiniMax-M3 model", () => {
 			const handlerDefault = new MiniMaxHandler({ minimaxApiKey: "test-minimax-api-key" })
 			const model = handlerDefault.getModel()
-			expect(model.id).toBe("MiniMax-M2.7")
+			expect(model.id).toBe("MiniMax-M3")
 		})
 	})
 
@@ -430,6 +430,19 @@ describe("MiniMaxHandler", () => {
 			expect(model.outputPrice).toBe(1.2)
 			expect(model.cacheWritesPrice).toBe(0.375)
 			expect(model.cacheReadsPrice).toBe(0.06)
+		})
+
+		it("should correctly configure MiniMax-M3 model properties", () => {
+			const model = minimaxModels["MiniMax-M3"]
+			expect(model.maxTokens).toBe(16_384)
+			expect(model.contextWindow).toBe(1_000_000)
+			expect(model.supportsImages).toBe(true)
+			expect(model.supportsPromptCache).toBe(true)
+			expect(model.supportsReasoningBudget).toBe(true)
+			expect(model.inputPrice).toBe(0.6)
+			expect(model.outputPrice).toBe(2.4)
+			expect(model.cacheReadsPrice).toBe(0.12)
+			expect(model.cacheWritesPrice).toBeUndefined()
 		})
 
 		it("should correctly configure MiniMax-M2.7-highspeed model properties", () => {
