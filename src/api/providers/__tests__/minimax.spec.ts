@@ -396,6 +396,24 @@ describe("MiniMaxHandler", () => {
 	})
 
 	describe("Model Configuration", () => {
+		it("should correctly configure MiniMax-M3 model properties", () => {
+			const handlerWithModel = new MiniMaxHandler({
+				apiModelId: "MiniMax-M3",
+				minimaxApiKey: "test-minimax-api-key",
+			})
+			const { id, info: model } = handlerWithModel.getModel()
+
+			expect(id).toBe("MiniMax-M3")
+			expect(model).toEqual(minimaxModels["MiniMax-M3"])
+			expect(model.contextWindow).toBe(1_000_000)
+			expect(model.supportsImages).toBe(true)
+			expect(model.supportsPromptCache).toBe(true)
+			expect(model.preserveReasoning).toBe(true)
+			expect(model.inputPrice).toBe(0.6)
+			expect(model.outputPrice).toBe(2.4)
+			expect(model.cacheReadsPrice).toBe(0.12)
+		})
+
 		it("should correctly configure MiniMax-M2 model properties", () => {
 			const model = minimaxModels["MiniMax-M2"]
 			expect(model.maxTokens).toBe(16_384)
