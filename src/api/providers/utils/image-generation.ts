@@ -32,6 +32,16 @@ interface ImagesApiResponse {
 	}
 }
 
+interface MiniMaxImageGenerationResponse {
+	data?: {
+		image_urls?: string[]
+	}
+	base_resp?: {
+		status_code?: number
+		status_msg?: string
+	}
+}
+
 export interface ImageGenerationResult {
 	success: boolean
 	imageData?: string
@@ -56,6 +66,92 @@ interface ImagesApiOptions {
 	size?: string
 	quality?: string
 	outputFormat?: string
+}
+
+interface MiniMaxImageGenerationOptions {
+	baseURL: string
+	authToken: string
+	model: string
+	prompt: string
+}
+
+/**
+ * Generate an image with MiniMax's native image generation API.
+ */
+export async function generateImageWithMiniMax(options: MiniMaxImageGenerationOptions): Promise<ImageGenerationResult> {
+	const { baseURL, authToken, model, prompt } = options
+
+	try {
+		const response = await fetch(`${baseURL.replace(/\/$/, "")}/image_generation`, {
+			method: "POST",
+			headers: {
+				Authorization: `Bearer ${authToken}`,
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				model,
+				prompt,
+				response_format: "base64",
+				n: 1,
+			}),
+		})
+
+		if (!response.ok) {
+			return {
+				success: false,
+				error: t("tools:generateImage.failedWithStatus", {
+					status: response.status,
+					statusText: response.statusText,
+				}),
+			}
+		}
+
+		const result: MiniMaxImageGenerationResponse = await response.json()
+		if (result.base_resp?.status_code) {
+			return {
+				success: false,
+				error: t("tools:generateImage.failedWithMessage", {
+					message: result.base_resp.status_msg || `MiniMax error ${result.base_resp.status_code}`,
+				}),
+			}
+		}
+
+		const imageData = result.data?.image_urls?.[0]
+		if (!imageData) {
+			return { success: false, error: t("tools:generateImage.noImageGenerated") }
+		}
+
+		if (imageData.startsWith("data:image/")) {
+			const format = imageData.match(/^data:image\/(\w+);/)?.[1] || "png"
+			return { success: true, imageData, imageFormat: format }
+		}
+
+		if (/^https?:\/\//.test(imageData)) {
+			const imageResponse = await fetch(imageData)
+			if (!imageResponse.ok) {
+				return { success: false, error: t("tools:generateImage.invalidImageData") }
+			}
+			const contentType = imageResponse.headers.get("content-type") || "image/png"
+			const format = contentType.split("/")[1]?.split(";")[0] || "png"
+			const encoded = Buffer.from(await imageResponse.arrayBuffer()).toString("base64")
+			return {
+				success: true,
+				imageData: `data:image/${format};base64,${encoded}`,
+				imageFormat: format,
+			}
+		}
+
+		return {
+			success: true,
+			imageData: `data:image/png;base64,${imageData}`,
+			imageFormat: "png",
+		}
+	} catch (error) {
+		return {
+			success: false,
+			error: error instanceof Error ? error.message : t("tools:generateImage.unknownError"),
+		}
+	}
 }
 
 /**

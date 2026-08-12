@@ -14,6 +14,7 @@ import { getReadablePath } from "../../utils/path"
 import { isPathOutsideWorkspace } from "../../utils/pathUtils"
 import { EXPERIMENT_IDS, experiments } from "../../shared/experiments"
 import { OpenRouterHandler } from "../../api/providers/openrouter"
+import { generateImageWithMiniMax } from "../../api/providers/utils/image-generation"
 import { BaseTool, ToolCallbacks } from "./BaseTool"
 import type { ToolUse } from "../../shared/tools"
 import { t } from "../../i18n"
@@ -154,9 +155,24 @@ export class GenerateImageTool extends BaseTool<"generate_image"> {
 
 		// Validate API key for OpenRouter
 		const openRouterApiKey = state?.openRouterImageApiKey
+		const minimaxApiKey = state?.apiConfiguration?.minimaxApiKey
 
 		if (imageProvider === "openrouter" && !openRouterApiKey) {
 			const errorMessage = t("tools:generateImage.openRouterApiKeyRequired")
+			await task.say("error", errorMessage)
+			pushToolResult(formatResponse.toolError(errorMessage))
+			return
+		}
+
+		if (imageProvider === "minimax" && !minimaxApiKey) {
+			const errorMessage = "A MiniMax API key is required for image generation"
+			await task.say("error", errorMessage)
+			pushToolResult(formatResponse.toolError(errorMessage))
+			return
+		}
+
+		if (imageProvider === "minimax" && inputImageData) {
+			const errorMessage = "The selected MiniMax image model only supports text-to-image generation"
 			await task.say("error", errorMessage)
 			pushToolResult(formatResponse.toolError(errorMessage))
 			return
@@ -188,13 +204,20 @@ export class GenerateImageTool extends BaseTool<"generate_image"> {
 				return
 			}
 
-			const openRouterHandler = new OpenRouterHandler({} as any)
-			const result = await openRouterHandler.generateImage(
-				prompt,
-				selectedModel,
-				openRouterApiKey!,
-				inputImageData,
-			)
+			const result =
+				modelProvider === "minimax"
+					? await generateImageWithMiniMax({
+							baseURL: state?.apiConfiguration?.minimaxBaseUrl || "https://api.minimax.io/v1",
+							authToken: minimaxApiKey!,
+							model: selectedModel,
+							prompt,
+						})
+					: await new OpenRouterHandler({} as any).generateImage(
+							prompt,
+							selectedModel,
+							openRouterApiKey!,
+							inputImageData,
+						)
 
 			if (!result.success) {
 				await task.say("error", result.error || "Failed to generate image")

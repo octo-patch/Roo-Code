@@ -76,6 +76,7 @@ export const ExperimentalSettings = ({
 										imageGenerationProvider={imageGenerationProvider}
 										openRouterImageApiKey={openRouterImageApiKey}
 										openRouterImageGenerationSelectedModel={openRouterImageGenerationSelectedModel}
+										apiConfiguration={apiConfiguration}
 										setImageGenerationProvider={setImageGenerationProvider}
 										setOpenRouterImageApiKey={setOpenRouterImageApiKey}
 										setImageGenerationSelectedModel={setImageGenerationSelectedModel}

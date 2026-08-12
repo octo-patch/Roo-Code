@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
-import { generateImageWithImagesApi, generateImageWithProvider } from "../image-generation"
+import { generateImageWithImagesApi, generateImageWithMiniMax, generateImageWithProvider } from "../image-generation"
 
 // Mock the i18n module
-vi.mock("../../../i18n", () => ({
+vi.mock("../../../../i18n", () => ({
 	t: (key: string, options?: any) => {
 		// Return a sensible mock for i18n
 		if (key === "tools:generateImage.failedWithMessage" && options?.message) {
@@ -20,6 +20,66 @@ global.FormData = vi.fn(() => ({
 global.Blob = vi.fn() as any
 global.atob = vi.fn((str: string) => {
 	return Buffer.from(str, "base64").toString("binary")
+})
+
+describe("generateImageWithMiniMax", () => {
+	beforeEach(() => {
+		vi.clearAllMocks()
+	})
+
+	it("uses the native image endpoint and returns base64 image data", async () => {
+		vi.mocked(global.fetch).mockResolvedValue({
+			ok: true,
+			json: vi.fn().mockResolvedValue({
+				data: { image_urls: ["aW1hZ2U="] },
+				base_resp: { status_code: 0 },
+			}),
+		} as any)
+
+		const result = await generateImageWithMiniMax({
+			baseURL: "https://api.minimax.io/v1",
+			authToken: "test-token",
+			model: "image-01",
+			prompt: "A lighthouse at dusk",
+		})
+
+		expect(result).toEqual({
+			success: true,
+			imageData: "data:image/png;base64,aW1hZ2U=",
+			imageFormat: "png",
+		})
+		expect(global.fetch).toHaveBeenCalledWith(
+			"https://api.minimax.io/v1/image_generation",
+			expect.objectContaining({
+				method: "POST",
+				headers: expect.objectContaining({ Authorization: "Bearer test-token" }),
+				body: JSON.stringify({
+					model: "image-01",
+					prompt: "A lighthouse at dusk",
+					response_format: "base64",
+					n: 1,
+				}),
+			}),
+		)
+	})
+
+	it("reports API-level errors", async () => {
+		vi.mocked(global.fetch).mockResolvedValue({
+			ok: true,
+			json: vi.fn().mockResolvedValue({
+				base_resp: { status_code: 1002, status_msg: "Invalid request" },
+			}),
+		} as any)
+
+		const result = await generateImageWithMiniMax({
+			baseURL: "https://api.minimaxi.com/v1",
+			authToken: "test-token",
+			model: "image-01-live",
+			prompt: "A lighthouse at dusk",
+		})
+
+		expect(result).toEqual({ success: false, error: "Invalid request" })
+	})
 })
 
 describe("generateImageWithImagesApi", () => {

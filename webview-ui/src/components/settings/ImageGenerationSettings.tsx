@@ -1,6 +1,11 @@
 import React, { useMemo } from "react"
 import { VSCodeCheckbox, VSCodeTextField, VSCodeDropdown, VSCodeOption } from "@vscode/webview-ui-toolkit/react"
-import { IMAGE_GENERATION_MODELS, type ImageGenerationProvider, getImageGenerationProvider } from "@roo-code/types"
+import {
+	IMAGE_GENERATION_MODELS,
+	type ImageGenerationProvider,
+	type ProviderSettings,
+	getImageGenerationProvider,
+} from "@roo-code/types"
 import { useAppTranslation } from "@/i18n/TranslationContext"
 
 interface ImageGenerationSettingsProps {
@@ -9,6 +14,7 @@ interface ImageGenerationSettingsProps {
 	imageGenerationProvider?: ImageGenerationProvider
 	openRouterImageApiKey?: string
 	openRouterImageGenerationSelectedModel?: string
+	apiConfiguration?: ProviderSettings
 	setImageGenerationProvider: (provider: ImageGenerationProvider) => void
 	setOpenRouterImageApiKey: (apiKey: string) => void
 	setImageGenerationSelectedModel: (model: string) => void
@@ -20,6 +26,7 @@ export const ImageGenerationSettings = ({
 	imageGenerationProvider,
 	openRouterImageApiKey,
 	openRouterImageGenerationSelectedModel,
+	apiConfiguration,
 	setImageGenerationProvider,
 	setOpenRouterImageApiKey,
 	setImageGenerationSelectedModel,
@@ -87,8 +94,7 @@ export const ImageGenerationSettings = ({
 		setImageGenerationSelectedModel(value)
 	}
 
-	const requiresApiKey = currentProvider === "openrouter"
-	const isConfigured = !requiresApiKey || (requiresApiKey && openRouterImageApiKey)
+	const isConfigured = currentProvider === "openrouter" ? !!openRouterImageApiKey : !!apiConfiguration?.minimaxApiKey
 
 	return (
 		<div className="space-y-4">
@@ -116,6 +122,9 @@ export const ImageGenerationSettings = ({
 							className="w-full">
 							<VSCodeOption value="openrouter" className="py-2 px-3">
 								OpenRouter
+							</VSCodeOption>
+							<VSCodeOption value="minimax" className="py-2 px-3">
+								MiniMax
 							</VSCodeOption>
 						</VSCodeDropdown>
 						<p className="text-vscode-descriptionForeground text-xs mt-1">
@@ -147,6 +156,12 @@ export const ImageGenerationSettings = ({
 								</a>
 							</p>
 						</div>
+					)}
+
+					{currentProvider === "minimax" && (
+						<p className="text-vscode-descriptionForeground text-xs mt-1">
+							Uses the MiniMax API key and endpoint from the active API configuration.
+						</p>
 					)}
 
 					{/* Model Selection */}
