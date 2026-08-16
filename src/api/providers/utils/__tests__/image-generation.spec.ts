@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
-import { generateImageWithImagesApi, generateImageWithProvider } from "../image-generation"
+import { generateImageWithImagesApi, generateImageWithMiniMax, generateImageWithProvider } from "../image-generation"
 
 // Mock the i18n module
 vi.mock("../../../i18n", () => ({
@@ -413,5 +413,224 @@ describe("generateImageWithProvider (chat completions)", () => {
 
 		expect(result.success).toBe(false)
 		expect(result.error).toBeDefined()
+	})
+})
+
+describe("generateImageWithMiniMax", () => {
+	beforeEach(() => {
+		vi.clearAllMocks()
+	})
+
+	afterEach(() => {
+		vi.clearAllMocks()
+	})
+
+	it("should post to the image generation endpoint and return a data URL", async () => {
+		const mockBase64 = "iVBORw0KGgoAAAANSUhEUg=="
+		const mockResponse = {
+			ok: true,
+			json: vi.fn().mockResolvedValue({
+				data: { image_base64: [mockBase64] },
+				metadata: { success_count: "1", failed_count: "0" },
+				base_resp: { status_code: 0, status_msg: "success" },
+			}),
+		}
+
+		vi.mocked(global.fetch).mockResolvedValue(mockResponse as any)
+
+		const result = await generateImageWithMiniMax({
+			baseURL: "https://api.example.com/v1",
+			authToken: "test-token",
+			model: "image-01",
+			prompt: "A cute cat",
+		})
+
+		expect(result.success).toBe(true)
+		expect(result.imageFormat).toBe("png")
+		expect(result.imageData).toBe(`data:image/png;base64,${mockBase64}`)
+
+		expect(global.fetch).toHaveBeenCalledWith(
+			"https://api.example.com/v1/image_generation",
+			expect.objectContaining({
+				method: "POST",
+				headers: expect.objectContaining({
+					Authorization: "Bearer test-token",
+					"Content-Type": "application/json",
+				}),
+			}),
+		)
+
+		const callArgs = vi.mocked(global.fetch).mock.calls[0]
+		const body = JSON.parse(callArgs[1]?.body as string)
+		expect(body).toEqual({ model: "image-01", prompt: "A cute cat", n: 1, response_format: "base64" })
+	})
+
+	it("should not duplicate the slash when the base URL has a trailing slash", async () => {
+		const mockResponse = {
+			ok: true,
+			json: vi.fn().mockResolvedValue({
+				data: { image_base64: ["iVBORw0KGgo="] },
+			}),
+		}
+
+		vi.mocked(global.fetch).mockResolvedValue(mockResponse as any)
+
+		const result = await generateImageWithMiniMax({
+			baseURL: "https://api.example.com/v1/",
+			authToken: "test-token",
+			model: "image-01",
+			prompt: "A cute cat",
+		})
+
+		expect(result.success).toBe(true)
+		expect(vi.mocked(global.fetch).mock.calls[0][0]).toBe("https://api.example.com/v1/image_generation")
+	})
+
+	it("should detect the jpeg format from the base64 payload", async () => {
+		const mockBase64 = "/9j/4AAQSkZJRgABAQ=="
+		const mockResponse = {
+			ok: true,
+			json: vi.fn().mockResolvedValue({
+				data: { image_base64: [mockBase64] },
+			}),
+		}
+
+		vi.mocked(global.fetch).mockResolvedValue(mockResponse as any)
+
+		const result = await generateImageWithMiniMax({
+			baseURL: "https://api.example.com/v1",
+			authToken: "test-token",
+			model: "image-01",
+			prompt: "A cute cat",
+		})
+
+		expect(result.success).toBe(true)
+		expect(result.imageFormat).toBe("jpeg")
+		expect(result.imageData).toBe(`data:image/jpeg;base64,${mockBase64}`)
+	})
+
+	it("should keep a payload that already is a data URL", async () => {
+		const mockResponse = {
+			ok: true,
+			json: vi.fn().mockResolvedValue({
+				data: { image_base64: ["data:image/png;base64,iVBORw0KGgo="] },
+			}),
+		}
+
+		vi.mocked(global.fetch).mockResolvedValue(mockResponse as any)
+
+		const result = await generateImageWithMiniMax({
+			baseURL: "https://api.example.com/v1",
+			authToken: "test-token",
+			model: "image-01",
+			prompt: "A cute cat",
+		})
+
+		expect(result.success).toBe(true)
+		expect(result.imageFormat).toBe("png")
+		expect(result.imageData).toBe("data:image/png;base64,iVBORw0KGgo=")
+	})
+
+	it("should surface a non-zero status code from the response body", async () => {
+		const mockResponse = {
+			ok: true,
+			json: vi.fn().mockResolvedValue({
+				base_resp: { status_code: 1026, status_msg: "Sensitive content detected in prompt" },
+			}),
+		}
+
+		vi.mocked(global.fetch).mockResolvedValue(mockResponse as any)
+
+		const result = await generateImageWithMiniMax({
+			baseURL: "https://api.example.com/v1",
+			authToken: "test-token",
+			model: "image-01",
+			prompt: "A cute cat",
+		})
+
+		expect(result.success).toBe(false)
+		expect(result.error).toBe("Sensitive content detected in prompt")
+	})
+
+	it("should surface the status message of an HTTP error", async () => {
+		const mockResponse = {
+			ok: false,
+			status: 401,
+			statusText: "Unauthorized",
+			text: vi
+				.fn()
+				.mockResolvedValue(JSON.stringify({ base_resp: { status_code: 1004, status_msg: "Bad key" } })),
+		}
+
+		vi.mocked(global.fetch).mockResolvedValue(mockResponse as any)
+
+		const result = await generateImageWithMiniMax({
+			baseURL: "https://api.example.com/v1",
+			authToken: "test-token",
+			model: "image-01",
+			prompt: "A cute cat",
+		})
+
+		expect(result.success).toBe(false)
+		expect(result.error).toBe("Bad key")
+	})
+
+	it("should fail when no image was generated", async () => {
+		const mockResponse = {
+			ok: true,
+			json: vi.fn().mockResolvedValue({
+				data: { image_base64: [] },
+				metadata: { success_count: "0", failed_count: "1" },
+				base_resp: { status_code: 0, status_msg: "success" },
+			}),
+		}
+
+		vi.mocked(global.fetch).mockResolvedValue(mockResponse as any)
+
+		const result = await generateImageWithMiniMax({
+			baseURL: "https://api.example.com/v1",
+			authToken: "test-token",
+			model: "image-01",
+			prompt: "A cute cat",
+		})
+
+		expect(result.success).toBe(false)
+		expect(result.error).toBe("tools:generateImage.noImageGenerated")
+	})
+
+	it("should fail when every requested image was rejected", async () => {
+		const mockResponse = {
+			ok: true,
+			json: vi.fn().mockResolvedValue({
+				data: { image_base64: ["iVBORw0KGgo="] },
+				metadata: { success_count: 0, failed_count: 1 },
+			}),
+		}
+
+		vi.mocked(global.fetch).mockResolvedValue(mockResponse as any)
+
+		const result = await generateImageWithMiniMax({
+			baseURL: "https://api.example.com/v1",
+			authToken: "test-token",
+			model: "image-01",
+			prompt: "A cute cat",
+		})
+
+		expect(result.success).toBe(false)
+		expect(result.error).toBe("tools:generateImage.noImageGenerated")
+	})
+
+	it("should handle network errors", async () => {
+		vi.mocked(global.fetch).mockRejectedValue(new Error("Network error"))
+
+		const result = await generateImageWithMiniMax({
+			baseURL: "https://api.example.com/v1",
+			authToken: "test-token",
+			model: "image-01",
+			prompt: "A cute cat",
+		})
+
+		expect(result.success).toBe(false)
+		expect(result.error).toContain("Network error")
 	})
 })

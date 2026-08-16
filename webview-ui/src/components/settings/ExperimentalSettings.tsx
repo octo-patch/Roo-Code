@@ -23,8 +23,12 @@ type ExperimentalSettingsProps = HTMLAttributes<HTMLDivElement> & {
 	imageGenerationProvider?: ImageGenerationProvider
 	openRouterImageApiKey?: string
 	openRouterImageGenerationSelectedModel?: string
+	minimaxImageApiKey?: string
+	minimaxImageBaseUrl?: string
 	setImageGenerationProvider?: (provider: ImageGenerationProvider) => void
 	setOpenRouterImageApiKey?: (apiKey: string) => void
+	setMinimaxImageApiKey?: (apiKey: string) => void
+	setMinimaxImageBaseUrl?: (baseUrl: string) => void
 	setImageGenerationSelectedModel?: (model: string) => void
 }
 
@@ -36,8 +40,12 @@ export const ExperimentalSettings = ({
 	imageGenerationProvider,
 	openRouterImageApiKey,
 	openRouterImageGenerationSelectedModel,
+	minimaxImageApiKey,
+	minimaxImageBaseUrl,
 	setImageGenerationProvider,
 	setOpenRouterImageApiKey,
+	setMinimaxImageApiKey,
+	setMinimaxImageBaseUrl,
 	setImageGenerationSelectedModel,
 	className,
 	...props
@@ -60,6 +68,8 @@ export const ExperimentalSettings = ({
 							config[0] === "IMAGE_GENERATION" &&
 							setImageGenerationProvider &&
 							setOpenRouterImageApiKey &&
+							setMinimaxImageApiKey &&
+							setMinimaxImageBaseUrl &&
 							setImageGenerationSelectedModel
 						) {
 							return (
@@ -76,8 +86,12 @@ export const ExperimentalSettings = ({
 										imageGenerationProvider={imageGenerationProvider}
 										openRouterImageApiKey={openRouterImageApiKey}
 										openRouterImageGenerationSelectedModel={openRouterImageGenerationSelectedModel}
+										minimaxImageApiKey={minimaxImageApiKey}
+										minimaxImageBaseUrl={minimaxImageBaseUrl}
 										setImageGenerationProvider={setImageGenerationProvider}
 										setOpenRouterImageApiKey={setOpenRouterImageApiKey}
+										setMinimaxImageApiKey={setMinimaxImageApiKey}
+										setMinimaxImageBaseUrl={setMinimaxImageBaseUrl}
 										setImageGenerationSelectedModel={setImageGenerationSelectedModel}
 									/>
 								</SearchableSetting>

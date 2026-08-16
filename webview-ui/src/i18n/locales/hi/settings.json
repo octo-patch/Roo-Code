@@ -795,6 +795,7 @@
 			"modelSelectionLabel": "छवि निर्माण मॉडल",
 			"modelSelectionDescription": "छवि निर्माण के लिए उपयोग करने वाला मॉडल चुनें",
 			"warningMissingKey": "⚠️ छवि निर्माण के लिए OpenRouter API कुंजी आवश्यक है। कृपया इसे ऊपर कॉन्फ़िगर करें।",
+			"warningMissingMinimaxKey": "⚠️ छवि निर्माण के लिए MiniMax API कुंजी आवश्यक है। कृपया इसे ऊपर कॉन्फ़िगर करें।",
 			"successConfigured": "✓ छवि निर्माण कॉन्फ़िगर है और उपयोग के लिए तैयार है"
 		},
 		"RUN_SLASH_COMMAND": {

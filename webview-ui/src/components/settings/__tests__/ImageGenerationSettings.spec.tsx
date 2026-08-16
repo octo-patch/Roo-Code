@@ -12,6 +12,8 @@ vi.mock("@/i18n/TranslationContext", () => ({
 describe("ImageGenerationSettings", () => {
 	const mockSetImageGenerationProvider = vi.fn()
 	const mockSetOpenRouterImageApiKey = vi.fn()
+	const mockSetMinimaxImageApiKey = vi.fn()
+	const mockSetMinimaxImageBaseUrl = vi.fn()
 	const mockSetImageGenerationSelectedModel = vi.fn()
 	const mockOnChange = vi.fn()
 
@@ -21,8 +23,12 @@ describe("ImageGenerationSettings", () => {
 		imageGenerationProvider: undefined,
 		openRouterImageApiKey: undefined,
 		openRouterImageGenerationSelectedModel: undefined,
+		minimaxImageApiKey: undefined,
+		minimaxImageBaseUrl: undefined,
 		setImageGenerationProvider: mockSetImageGenerationProvider,
 		setOpenRouterImageApiKey: mockSetOpenRouterImageApiKey,
+		setMinimaxImageApiKey: mockSetMinimaxImageApiKey,
+		setMinimaxImageBaseUrl: mockSetMinimaxImageBaseUrl,
 		setImageGenerationSelectedModel: mockSetImageGenerationSelectedModel,
 	}
 
@@ -88,6 +94,29 @@ describe("ImageGenerationSettings", () => {
 			expect(
 				getByPlaceholderText("settings:experimental.IMAGE_GENERATION.openRouterApiKeyPlaceholder"),
 			).toBeInTheDocument()
+		})
+
+		it("should render the MiniMax API key field when provider is minimax", () => {
+			const { getByPlaceholderText, queryByPlaceholderText } = render(
+				<ImageGenerationSettings {...defaultProps} enabled={true} imageGenerationProvider="minimax" />,
+			)
+
+			expect(getByPlaceholderText("settings:placeholders.apiKey")).toBeInTheDocument()
+			expect(
+				queryByPlaceholderText("settings:experimental.IMAGE_GENERATION.openRouterApiKeyPlaceholder"),
+			).not.toBeInTheDocument()
+		})
+
+		it("should call setMinimaxImageApiKey when the user changes the MiniMax API key", () => {
+			const { getByPlaceholderText } = render(
+				<ImageGenerationSettings {...defaultProps} enabled={true} imageGenerationProvider="minimax" />,
+			)
+
+			fireEvent.input(getByPlaceholderText("settings:placeholders.apiKey"), {
+				target: { value: "new-api-key" },
+			})
+
+			expect(mockSetMinimaxImageApiKey).toHaveBeenCalledWith("new-api-key")
 		})
 
 		it("should not render input fields when enabled is false", () => {

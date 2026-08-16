@@ -18,6 +18,7 @@
 	},
 	"generateImage": {
 		"openRouterApiKeyRequired": "OpenRouter modelleriyle görüntü oluşturma için OpenRouter API anahtarı gereklidir. Lütfen Görüntü Oluşturma deneysel ayarlarında yapılandırın.",
+		"minimaxApiKeyRequired": "MiniMax modelleriyle görüntü oluşturma için MiniMax API anahtarı gereklidir. Lütfen Görüntü Oluşturma deneysel ayarlarında yapılandırın.",
 		"failedWithStatus": "Görüntü oluşturma başarısız: {{status}} {{statusText}}",
 		"failedWithMessage": "Görüntü oluşturma başarısız: {{message}}",
 		"noImageGenerated": "Yanıtta görüntü oluşturulmadı",

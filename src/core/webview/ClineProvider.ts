@@ -1998,6 +1998,8 @@ export class ClineProvider
 			imageGenerationProvider,
 			openRouterImageApiKey,
 			openRouterImageGenerationSelectedModel,
+			minimaxImageApiKey,
+			minimaxImageBaseUrl,
 			lockApiConfigAcrossModes,
 		} = await this.getState()
 
@@ -2105,6 +2107,8 @@ export class ClineProvider
 			imageGenerationProvider,
 			openRouterImageApiKey,
 			openRouterImageGenerationSelectedModel,
+			minimaxImageApiKey,
+			minimaxImageBaseUrl,
 			openAiCodexIsAuthenticated: await (async () => {
 				try {
 					const { openAiCodexOAuthManager } = await import("../../integrations/openai-codex/oauth")
@@ -2249,6 +2253,8 @@ export class ClineProvider
 			imageGenerationProvider: stateValues.imageGenerationProvider,
 			openRouterImageApiKey: stateValues.openRouterImageApiKey,
 			openRouterImageGenerationSelectedModel: stateValues.openRouterImageGenerationSelectedModel,
+			minimaxImageApiKey: stateValues.minimaxImageApiKey,
+			minimaxImageBaseUrl: stateValues.minimaxImageBaseUrl,
 		}
 	}
 

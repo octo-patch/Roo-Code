@@ -795,6 +795,7 @@
 			"modelSelectionLabel": "Afbeeldingsgeneratiemodel",
 			"modelSelectionDescription": "Selecteer het model voor afbeeldingsgeneratie",
 			"warningMissingKey": "⚠️ OpenRouter API-sleutel is vereist voor afbeeldingsgeneratie. Configureer deze hierboven.",
+			"warningMissingMinimaxKey": "⚠️ MiniMax API-sleutel is vereist voor afbeeldingsgeneratie. Configureer deze hierboven.",
 			"successConfigured": "✓ Afbeeldingsgeneratie is geconfigureerd en klaar voor gebruik"
 		},
 		"RUN_SLASH_COMMAND": {

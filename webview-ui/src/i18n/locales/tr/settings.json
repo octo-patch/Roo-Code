@@ -795,6 +795,7 @@
 			"modelSelectionLabel": "Görüntü Üretim Modeli",
 			"modelSelectionDescription": "Görüntü üretimi için kullanılacak modeli seçin",
 			"warningMissingKey": "⚠️ Görüntü üretimi için OpenRouter API anahtarı gereklidir. Lütfen yukarıda yapılandırın.",
+			"warningMissingMinimaxKey": "⚠️ Görüntü üretimi için MiniMax API anahtarı gereklidir. Lütfen yukarıda yapılandırın.",
 			"successConfigured": "✓ Görüntü üretimi yapılandırılmış ve kullanıma hazır"
 		},
 		"RUN_SLASH_COMMAND": {

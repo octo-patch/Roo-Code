@@ -18,6 +18,7 @@
 	},
 	"generateImage": {
 		"openRouterApiKeyRequired": "OpenRouter API-sleutel is vereist voor het genereren van afbeeldingen met OpenRouter-modellen. Configureer deze in de Experimentele Instellingen voor Afbeeldingsgeneratie.",
+		"minimaxApiKeyRequired": "MiniMax API-sleutel is vereist voor het genereren van afbeeldingen met MiniMax-modellen. Configureer deze in de Experimentele Instellingen voor Afbeeldingsgeneratie.",
 		"failedWithStatus": "Afbeelding genereren mislukt: {{status}} {{statusText}}",
 		"failedWithMessage": "Afbeelding genereren mislukt: {{message}}",
 		"noImageGenerated": "Er is geen afbeelding gegenereerd in het antwoord",

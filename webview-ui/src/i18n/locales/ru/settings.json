@@ -795,6 +795,7 @@
 			"modelSelectionLabel": "Модель генерации изображений",
 			"modelSelectionDescription": "Выберите модель для генерации изображений",
 			"warningMissingKey": "⚠️ API-ключ OpenRouter необходим для генерации изображений. Настройте его выше.",
+			"warningMissingMinimaxKey": "⚠️ API-ключ MiniMax необходим для генерации изображений. Настройте его выше.",
 			"successConfigured": "✓ Генерация изображений настроена и готова к использованию"
 		},
 		"RUN_SLASH_COMMAND": {

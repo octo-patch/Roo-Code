@@ -795,6 +795,7 @@
 			"modelSelectionLabel": "Model generowania obrazów",
 			"modelSelectionDescription": "Wybierz model do generowania obrazów",
 			"warningMissingKey": "⚠️ Klucz API OpenRouter jest wymagany do generowania obrazów. Skonfiguruj go powyżej.",
+			"warningMissingMinimaxKey": "⚠️ Klucz API MiniMax jest wymagany do generowania obrazów. Skonfiguruj go powyżej.",
 			"successConfigured": "✓ Generowanie obrazów jest skonfigurowane i gotowe do użycia"
 		},
 		"RUN_SLASH_COMMAND": {

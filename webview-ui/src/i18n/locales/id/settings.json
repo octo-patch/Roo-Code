@@ -795,6 +795,7 @@
 			"modelSelectionLabel": "Model Pembuatan Gambar",
 			"modelSelectionDescription": "Pilih model untuk pembuatan gambar",
 			"warningMissingKey": "⚠️ Kunci API OpenRouter diperlukan untuk pembuatan gambar. Silakan konfigurasi di atas.",
+			"warningMissingMinimaxKey": "⚠️ Kunci API MiniMax diperlukan untuk pembuatan gambar. Silakan konfigurasi di atas.",
 			"successConfigured": "✓ Pembuatan gambar dikonfigurasi dan siap digunakan"
 		},
 		"RUN_SLASH_COMMAND": {

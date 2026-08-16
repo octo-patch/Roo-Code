@@ -1,6 +1,13 @@
 import React, { useMemo } from "react"
 import { VSCodeCheckbox, VSCodeTextField, VSCodeDropdown, VSCodeOption } from "@vscode/webview-ui-toolkit/react"
-import { IMAGE_GENERATION_MODELS, type ImageGenerationProvider, getImageGenerationProvider } from "@roo-code/types"
+import {
+	IMAGE_GENERATION_MODELS,
+	MINIMAX_IMAGE_BASE_URL_CHINA,
+	MINIMAX_IMAGE_BASE_URL_INTERNATIONAL,
+	minimaxDefaultImageBaseUrl,
+	type ImageGenerationProvider,
+	getImageGenerationProvider,
+} from "@roo-code/types"
 import { useAppTranslation } from "@/i18n/TranslationContext"
 
 interface ImageGenerationSettingsProps {
@@ -9,8 +16,12 @@ interface ImageGenerationSettingsProps {
 	imageGenerationProvider?: ImageGenerationProvider
 	openRouterImageApiKey?: string
 	openRouterImageGenerationSelectedModel?: string
+	minimaxImageApiKey?: string
+	minimaxImageBaseUrl?: string
 	setImageGenerationProvider: (provider: ImageGenerationProvider) => void
 	setOpenRouterImageApiKey: (apiKey: string) => void
+	setMinimaxImageApiKey: (apiKey: string) => void
+	setMinimaxImageBaseUrl: (baseUrl: string) => void
 	setImageGenerationSelectedModel: (model: string) => void
 }
 
@@ -20,8 +31,12 @@ export const ImageGenerationSettings = ({
 	imageGenerationProvider,
 	openRouterImageApiKey,
 	openRouterImageGenerationSelectedModel,
+	minimaxImageApiKey,
+	minimaxImageBaseUrl,
 	setImageGenerationProvider,
 	setOpenRouterImageApiKey,
+	setMinimaxImageApiKey,
+	setMinimaxImageBaseUrl,
 	setImageGenerationSelectedModel,
 }: ImageGenerationSettingsProps) => {
 	const { t } = useAppTranslation()
@@ -87,8 +102,12 @@ export const ImageGenerationSettings = ({
 		setImageGenerationSelectedModel(value)
 	}
 
-	const requiresApiKey = currentProvider === "openrouter"
-	const isConfigured = !requiresApiKey || (requiresApiKey && openRouterImageApiKey)
+	const apiKey = currentProvider === "minimax" ? minimaxImageApiKey : openRouterImageApiKey
+	const requiresApiKey = currentProvider === "openrouter" || currentProvider === "minimax"
+	const isConfigured = !requiresApiKey || !!apiKey
+
+	const currentMinimaxBaseUrl = minimaxImageBaseUrl || minimaxDefaultImageBaseUrl
+	const isMinimaxChinaEndpoint = currentMinimaxBaseUrl === MINIMAX_IMAGE_BASE_URL_CHINA
 
 	return (
 		<div className="space-y-4">
@@ -116,6 +135,9 @@ export const ImageGenerationSettings = ({
 							className="w-full">
 							<VSCodeOption value="openrouter" className="py-2 px-3">
 								OpenRouter
+							</VSCodeOption>
+							<VSCodeOption value="minimax" className="py-2 px-3">
+								MiniMax
 							</VSCodeOption>
 						</VSCodeDropdown>
 						<p className="text-vscode-descriptionForeground text-xs mt-1">
@@ -149,6 +171,54 @@ export const ImageGenerationSettings = ({
 						</div>
 					)}
 
+					{/* Base URL and API Key Configuration (only for MiniMax) */}
+					{currentProvider === "minimax" && (
+						<>
+							<div>
+								<label className="block font-medium mb-1">
+									{t("settings:providers.minimaxBaseUrl")}
+								</label>
+								<VSCodeDropdown
+									value={currentMinimaxBaseUrl}
+									onChange={(e: any) => setMinimaxImageBaseUrl(e.target.value)}
+									className="w-full">
+									<VSCodeOption value={MINIMAX_IMAGE_BASE_URL_INTERNATIONAL} className="py-2 px-3">
+										api.minimax.io
+									</VSCodeOption>
+									<VSCodeOption value={MINIMAX_IMAGE_BASE_URL_CHINA} className="py-2 px-3">
+										api.minimaxi.com
+									</VSCodeOption>
+								</VSCodeDropdown>
+							</div>
+							<div>
+								<label className="block font-medium mb-1">
+									{t("settings:providers.minimaxApiKey")}
+								</label>
+								<VSCodeTextField
+									value={minimaxImageApiKey || ""}
+									onInput={(e: any) => setMinimaxImageApiKey(e.target.value)}
+									placeholder={t("settings:placeholders.apiKey")}
+									className="w-full"
+									type="password"
+								/>
+								<p className="text-vscode-descriptionForeground text-xs mt-1">
+									{t("settings:experimental.IMAGE_GENERATION.getApiKeyText")}{" "}
+									<a
+										href={
+											isMinimaxChinaEndpoint
+												? "https://platform.minimaxi.com/user-center/basic-information/interface-key"
+												: "https://www.minimax.io/platform/user-center/basic-information/interface-key"
+										}
+										target="_blank"
+										rel="noopener noreferrer"
+										className="text-vscode-textLink-foreground hover:text-vscode-textLink-activeForeground">
+										{isMinimaxChinaEndpoint ? "platform.minimaxi.com" : "minimax.io/platform"}
+									</a>
+								</p>
+							</div>
+						</>
+					)}
+
 					{/* Model Selection */}
 					<div>
 						<label className="block font-medium mb-1">
@@ -172,7 +242,9 @@ export const ImageGenerationSettings = ({
 					{/* Status Message */}
 					{enabled && !isConfigured && (
 						<div className="p-2 bg-vscode-editorWarning-background text-vscode-editorWarning-foreground rounded text-sm">
-							{t("settings:experimental.IMAGE_GENERATION.warningMissingKey")}
+							{currentProvider === "minimax"
+								? t("settings:experimental.IMAGE_GENERATION.warningMissingMinimaxKey")
+								: t("settings:experimental.IMAGE_GENERATION.warningMissingKey")}
 						</div>
 					)}
 

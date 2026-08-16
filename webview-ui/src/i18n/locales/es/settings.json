@@ -795,6 +795,7 @@
 			"modelSelectionLabel": "Modelo de generación de imágenes",
 			"modelSelectionDescription": "Selecciona el modelo para la generación de imágenes",
 			"warningMissingKey": "⚠️ La clave API de OpenRouter es requerida para la generación de imágenes. Por favor, configúrala arriba.",
+			"warningMissingMinimaxKey": "⚠️ La clave API de MiniMax es requerida para la generación de imágenes. Por favor, configúrala arriba.",
 			"successConfigured": "✓ La generación de imágenes está configurada y lista para usar"
 		},
 		"RUN_SLASH_COMMAND": {

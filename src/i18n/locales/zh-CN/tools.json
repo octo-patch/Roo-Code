@@ -18,6 +18,7 @@
 	},
 	"generateImage": {
 		"openRouterApiKeyRequired": "使用 OpenRouter 模型生成图像需要 OpenRouter API 密钥。请在图像生成实验设置中配置。",
+		"minimaxApiKeyRequired": "使用 MiniMax 模型生成图像需要 MiniMax API 密钥。请在图像生成实验设置中配置。",
 		"failedWithStatus": "图像生成失败：{{status}} {{statusText}}",
 		"failedWithMessage": "图像生成失败：{{message}}",
 		"noImageGenerated": "响应中未生成图像",

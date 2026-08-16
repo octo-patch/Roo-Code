@@ -6,6 +6,7 @@ import {
 	IMAGE_GENERATION_MODEL_IDS,
 	IMAGE_GENERATION_MODELS,
 	getImageGenerationProvider,
+	minimaxDefaultImageBaseUrl,
 } from "@roo-code/types"
 import { Task } from "../task/Task"
 import { formatResponse } from "../prompts/responses"
@@ -14,6 +15,7 @@ import { getReadablePath } from "../../utils/path"
 import { isPathOutsideWorkspace } from "../../utils/pathUtils"
 import { EXPERIMENT_IDS, experiments } from "../../shared/experiments"
 import { OpenRouterHandler } from "../../api/providers/openrouter"
+import { generateImageWithMiniMax, type ImageGenerationResult } from "../../api/providers/utils/image-generation"
 import { BaseTool, ToolCallbacks } from "./BaseTool"
 import type { ToolUse } from "../../shared/tools"
 import { t } from "../../i18n"
@@ -152,12 +154,29 @@ export class GenerateImageTool extends BaseTool<"generate_image"> {
 		const modelProvider = imageProvider
 		const apiMethod = modelInfo?.apiMethod
 
-		// Validate API key for OpenRouter
+		// Validate API key for the selected provider
 		const openRouterApiKey = state?.openRouterImageApiKey
+		const minimaxApiKey = state?.minimaxImageApiKey
 
 		if (imageProvider === "openrouter" && !openRouterApiKey) {
 			const errorMessage = t("tools:generateImage.openRouterApiKeyRequired")
 			await task.say("error", errorMessage)
+			pushToolResult(formatResponse.toolError(errorMessage))
+			return
+		}
+
+		if (imageProvider === "minimax" && !minimaxApiKey) {
+			const errorMessage = t("tools:generateImage.minimaxApiKeyRequired")
+			await task.say("error", errorMessage)
+			pushToolResult(formatResponse.toolError(errorMessage))
+			return
+		}
+
+		if (imageProvider === "minimax" && inputImageData) {
+			const errorMessage =
+				"The selected MiniMax image model supports text-to-image generation only. Remove the input image and try again."
+			await task.say("error", errorMessage)
+			task.didToolFailInCurrentTurn = true
 			pushToolResult(formatResponse.toolError(errorMessage))
 			return
 		}
@@ -188,13 +207,19 @@ export class GenerateImageTool extends BaseTool<"generate_image"> {
 				return
 			}
 
-			const openRouterHandler = new OpenRouterHandler({} as any)
-			const result = await openRouterHandler.generateImage(
-				prompt,
-				selectedModel,
-				openRouterApiKey!,
-				inputImageData,
-			)
+			let result: ImageGenerationResult
+
+			if (imageProvider === "minimax") {
+				result = await generateImageWithMiniMax({
+					baseURL: state?.minimaxImageBaseUrl || minimaxDefaultImageBaseUrl,
+					authToken: minimaxApiKey!,
+					model: selectedModel,
+					prompt,
+				})
+			} else {
+				const openRouterHandler = new OpenRouterHandler({} as any)
+				result = await openRouterHandler.generateImage(prompt, selectedModel, openRouterApiKey!, inputImageData)
+			}
 
 			if (!result.success) {
 				await task.say("error", result.error || "Failed to generate image")

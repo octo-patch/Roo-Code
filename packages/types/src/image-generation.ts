@@ -5,7 +5,7 @@
 /**
  * API method used for image generation
  */
-export type ImageGenerationApiMethod = "chat_completions" | "images_api"
+export type ImageGenerationApiMethod = "chat_completions" | "images_api" | "image_generation"
 
 export interface ImageGenerationModel {
 	value: string
@@ -22,6 +22,9 @@ export const IMAGE_GENERATION_MODELS: ImageGenerationModel[] = [
 	{ value: "openai/gpt-5-image-mini", label: "GPT-5 Image Mini", provider: "openrouter" },
 	{ value: "black-forest-labs/flux.2-flex", label: "Black Forest Labs FLUX.2 Flex", provider: "openrouter" },
 	{ value: "black-forest-labs/flux.2-pro", label: "Black Forest Labs FLUX.2 Pro", provider: "openrouter" },
+	// MiniMax models
+	{ value: "image-01", label: "Image 01", provider: "minimax", apiMethod: "image_generation" },
+	{ value: "image-01-live", label: "Image 01 Live", provider: "minimax", apiMethod: "image_generation" },
 ]
 
 /**
@@ -32,7 +35,7 @@ export const IMAGE_GENERATION_MODEL_IDS = IMAGE_GENERATION_MODELS.map((m) => m.v
 /**
  * Image generation provider type
  */
-export type ImageGenerationProvider = "openrouter"
+export type ImageGenerationProvider = "openrouter" | "minimax"
 
 /**
  * Get the image generation provider with backwards compatibility

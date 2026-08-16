@@ -795,6 +795,7 @@
 			"modelSelectionLabel": "图像生成模型",
 			"modelSelectionDescription": "选择用于图像生成的模型",
 			"warningMissingKey": "⚠️ 图像生成需要 OpenRouter API 密钥。请在上方配置。",
+			"warningMissingMinimaxKey": "⚠️ 图像生成需要 MiniMax API 密钥。请在上方配置。",
 			"successConfigured": "✓ 图像生成已配置完成，可以使用"
 		},
 		"RUN_SLASH_COMMAND": {

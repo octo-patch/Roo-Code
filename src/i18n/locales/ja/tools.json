@@ -18,6 +18,7 @@
 	},
 	"generateImage": {
 		"openRouterApiKeyRequired": "OpenRouterモデルでの画像生成にはOpenRouter APIキーが必要です。画像生成の実験設定で設定してください。",
+		"minimaxApiKeyRequired": "MiniMaxモデルでの画像生成にはMiniMax APIキーが必要です。画像生成の実験設定で設定してください。",
 		"failedWithStatus": "画像生成に失敗しました: {{status}} {{statusText}}",
 		"failedWithMessage": "画像生成に失敗しました: {{message}}",
 		"noImageGenerated": "レスポンスに画像が生成されませんでした",

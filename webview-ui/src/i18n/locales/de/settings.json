@@ -795,6 +795,7 @@
 			"modelSelectionLabel": "Bildgenerierungsmodell",
 			"modelSelectionDescription": "Wähle das Modell für die Bildgenerierung aus",
 			"warningMissingKey": "⚠️ OpenRouter API-Schlüssel ist für Bildgenerierung erforderlich. Bitte konfiguriere ihn oben.",
+			"warningMissingMinimaxKey": "⚠️ MiniMax API-Schlüssel ist für Bildgenerierung erforderlich. Bitte konfiguriere ihn oben.",
 			"successConfigured": "✓ Bildgenerierung ist konfiguriert und einsatzbereit"
 		},
 		"RUN_SLASH_COMMAND": {

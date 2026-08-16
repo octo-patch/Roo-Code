@@ -18,6 +18,7 @@
 	},
 	"generateImage": {
 		"openRouterApiKeyRequired": "Se requiere la clave API de OpenRouter para la generación de imágenes con modelos de OpenRouter. Por favor, configúrala en la configuración experimental de Generación de Imágenes.",
+		"minimaxApiKeyRequired": "Se requiere la clave API de MiniMax para la generación de imágenes con modelos de MiniMax. Por favor, configúrala en la configuración experimental de Generación de Imágenes.",
 		"failedWithStatus": "Error al generar imagen: {{status}} {{statusText}}",
 		"failedWithMessage": "Error al generar imagen: {{message}}",
 		"noImageGenerated": "No se generó ninguna imagen en la respuesta",

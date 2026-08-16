@@ -857,6 +857,7 @@
 			"modelSelectionLabel": "Image Generation Model",
 			"modelSelectionDescription": "Select the model to use for image generation",
 			"warningMissingKey": "⚠️ OpenRouter API key is required for OpenRouter image generation. Please configure it above.",
+			"warningMissingMinimaxKey": "⚠️ MiniMax API key is required for MiniMax image generation. Please configure it above.",
 			"successConfigured": "✓ Image generation is configured and ready to use"
 		},
 		"RUN_SLASH_COMMAND": {

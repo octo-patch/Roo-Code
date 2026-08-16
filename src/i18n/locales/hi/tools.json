@@ -18,6 +18,7 @@
 	},
 	"generateImage": {
 		"openRouterApiKeyRequired": "OpenRouter मॉडल के साथ छवि निर्माण के लिए OpenRouter API कुंजी आवश्यक है। कृपया इसे छवि निर्माण प्रयोगात्मक सेटिंग में कॉन्फ़िगर करें।",
+		"minimaxApiKeyRequired": "MiniMax मॉडल के साथ छवि निर्माण के लिए MiniMax API कुंजी आवश्यक है। कृपया इसे छवि निर्माण प्रयोगात्मक सेटिंग में कॉन्फ़िगर करें।",
 		"failedWithStatus": "छवि निर्माण विफल: {{status}} {{statusText}}",
 		"failedWithMessage": "छवि निर्माण विफल: {{message}}",
 		"noImageGenerated": "प्रतिक्रिया में कोई छवि उत्पन्न नहीं हुई",

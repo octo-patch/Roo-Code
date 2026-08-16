@@ -795,6 +795,7 @@
 			"modelSelectionLabel": "画像生成モデル",
 			"modelSelectionDescription": "画像生成に使用するモデルを選択",
 			"warningMissingKey": "⚠️ 画像生成にはOpenRouter APIキーが必要です。上記で設定してください。",
+			"warningMissingMinimaxKey": "⚠️ 画像生成にはMiniMax APIキーが必要です。上記で設定してください。",
 			"successConfigured": "✓ 画像生成が設定され、使用準備完了です"
 		},
 		"RUN_SLASH_COMMAND": {

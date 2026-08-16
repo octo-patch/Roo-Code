@@ -18,6 +18,7 @@
 	},
 	"generateImage": {
 		"openRouterApiKeyRequired": "Yêu cầu khóa API OpenRouter để tạo hình ảnh với các mô hình OpenRouter. Vui lòng cấu hình trong cài đặt thử nghiệm Tạo hình ảnh.",
+		"minimaxApiKeyRequired": "Yêu cầu khóa API MiniMax để tạo hình ảnh với các mô hình MiniMax. Vui lòng cấu hình trong cài đặt thử nghiệm Tạo hình ảnh.",
 		"failedWithStatus": "Tạo hình ảnh thất bại: {{status}} {{statusText}}",
 		"failedWithMessage": "Tạo hình ảnh thất bại: {{message}}",
 		"noImageGenerated": "Không có hình ảnh nào được tạo trong phản hồi",

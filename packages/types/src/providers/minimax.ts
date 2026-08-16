@@ -134,3 +134,14 @@ export const minimaxDefaultModelInfo: ModelInfo = minimaxModels[minimaxDefaultMo
 
 export const MINIMAX_DEFAULT_MAX_TOKENS = 16_384
 export const MINIMAX_DEFAULT_TEMPERATURE = 1.0
+
+// MiniMax image generation
+// https://platform.minimax.io/docs/api-reference/image-generation-t2i
+// The international and China platforms expose the same API surface on different hosts.
+export const MINIMAX_IMAGE_BASE_URL_INTERNATIONAL = "https://api.minimax.io/v1"
+export const MINIMAX_IMAGE_BASE_URL_CHINA = "https://api.minimaxi.com/v1"
+
+export const minimaxDefaultImageBaseUrl: string = MINIMAX_IMAGE_BASE_URL_INTERNATIONAL
+
+/** Path appended to the base URL for the image generation endpoint. */
+export const MINIMAX_IMAGE_GENERATION_PATH = "/image_generation"

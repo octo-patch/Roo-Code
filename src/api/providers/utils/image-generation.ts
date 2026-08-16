@@ -1,3 +1,5 @@
+import { MINIMAX_IMAGE_GENERATION_PATH } from "@roo-code/types"
+
 import { t } from "../../../i18n"
 
 // Image generation types
@@ -56,6 +58,28 @@ interface ImagesApiOptions {
 	size?: string
 	quality?: string
 	outputFormat?: string
+}
+
+interface MiniMaxImageOptions {
+	baseURL: string
+	authToken: string
+	model: string
+	prompt: string
+}
+
+interface MiniMaxImageApiResponse {
+	data?: {
+		image_urls?: string[]
+		image_base64?: string[]
+	}
+	metadata?: {
+		success_count?: number | string
+		failed_count?: number | string
+	}
+	base_resp?: {
+		status_code?: number
+		status_msg?: string
+	}
 }
 
 /**
@@ -304,6 +328,112 @@ export async function generateImageWithImagesApi(options: ImagesApiOptions): Pro
 			success: false,
 			error: t("tools:generateImage.invalidImageData"),
 		}
+	} catch (error) {
+		return {
+			success: false,
+			error: error instanceof Error ? error.message : t("tools:generateImage.unknownError"),
+		}
+	}
+}
+
+/**
+ * Detect the image format of a raw base64 payload from its magic bytes so the
+ * resulting data URL advertises the correct MIME type.
+ */
+function detectBase64ImageFormat(base64: string): "png" | "jpeg" {
+	return base64.startsWith("/9j/") ? "jpeg" : "png"
+}
+
+/**
+ * Generate an image using the MiniMax image generation API (/v1/image_generation).
+ *
+ * The endpoint answers with `data.image_base64` when `response_format` is "base64",
+ * and reports API level failures through `base_resp.status_code` / `base_resp.status_msg`
+ * even for HTTP 200 responses.
+ */
+export async function generateImageWithMiniMax(options: MiniMaxImageOptions): Promise<ImageGenerationResult> {
+	const { baseURL, authToken, model, prompt } = options
+
+	try {
+		const url = `${baseURL.replace(/\/$/, "")}${MINIMAX_IMAGE_GENERATION_PATH}`
+
+		const response = await fetch(url, {
+			method: "POST",
+			headers: {
+				Authorization: `Bearer ${authToken}`,
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				model,
+				prompt,
+				n: 1,
+				// Ask for inline data so the generated image can be written to disk
+				// without depending on the temporary image URLs, which expire.
+				response_format: "base64",
+			}),
+		})
+
+		if (!response.ok) {
+			const errorText = await response.text()
+			let errorMessage = t("tools:generateImage.failedWithStatus", {
+				status: response.status,
+				statusText: response.statusText,
+			})
+
+			try {
+				const errorJson = JSON.parse(errorText)
+				const message = errorJson.base_resp?.status_msg ?? errorJson.error?.message
+
+				if (message) {
+					errorMessage = t("tools:generateImage.failedWithMessage", { message })
+				}
+			} catch {
+				// Use default error message
+			}
+
+			return { success: false, error: errorMessage }
+		}
+
+		const result: MiniMaxImageApiResponse = await response.json()
+
+		// MiniMax reports failures in the response body with a non-zero status code.
+		if (result.base_resp && result.base_resp.status_code !== 0) {
+			return {
+				success: false,
+				error: t("tools:generateImage.failedWithMessage", {
+					message: result.base_resp.status_msg ?? `${result.base_resp.status_code}`,
+				}),
+			}
+		}
+
+		const images = result.data?.image_base64
+		const successCount =
+			result.metadata?.success_count !== undefined ? Number(result.metadata.success_count) : undefined
+
+		if (!images || images.length === 0 || successCount === 0) {
+			return { success: false, error: t("tools:generateImage.noImageGenerated") }
+		}
+
+		const image = images[0]
+
+		if (!image) {
+			return { success: false, error: t("tools:generateImage.invalidImageData") }
+		}
+
+		// Some responses already carry a full data URL.
+		if (image.startsWith("data:image/")) {
+			const formatMatch = image.match(/^data:image\/(\w+);base64,/)
+
+			if (!formatMatch) {
+				return { success: false, error: t("tools:generateImage.invalidImageFormat") }
+			}
+
+			return { success: true, imageData: image, imageFormat: formatMatch[1] }
+		}
+
+		const imageFormat = detectBase64ImageFormat(image)
+
+		return { success: true, imageData: `data:image/${imageFormat};base64,${image}`, imageFormat }
 	} catch (error) {
 		return {
 			success: false,

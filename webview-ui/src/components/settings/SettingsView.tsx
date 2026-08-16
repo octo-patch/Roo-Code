@@ -196,6 +196,8 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 		imageGenerationProvider,
 		openRouterImageApiKey,
 		openRouterImageGenerationSelectedModel,
+		minimaxImageApiKey,
+		minimaxImageBaseUrl,
 		reasoningBlockCollapsed,
 		enterBehavior,
 		includeCurrentTime,
@@ -319,6 +321,26 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 		})
 	}, [])
 
+	const setMinimaxImageApiKey = useCallback((apiKey: string) => {
+		setCachedState((prevState) => {
+			if (prevState.minimaxImageApiKey !== apiKey) {
+				setChangeDetected(true)
+			}
+
+			return { ...prevState, minimaxImageApiKey: apiKey }
+		})
+	}, [])
+
+	const setMinimaxImageBaseUrl = useCallback((baseUrl: string) => {
+		setCachedState((prevState) => {
+			if (prevState.minimaxImageBaseUrl !== baseUrl) {
+				setChangeDetected(true)
+			}
+
+			return { ...prevState, minimaxImageBaseUrl: baseUrl }
+		})
+	}, [])
+
 	const setImageGenerationSelectedModel = useCallback((model: string) => {
 		setCachedState((prevState) => {
 			if (prevState.openRouterImageGenerationSelectedModel !== model) {
@@ -407,6 +429,8 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 					imageGenerationProvider,
 					openRouterImageApiKey,
 					openRouterImageGenerationSelectedModel,
+					minimaxImageApiKey,
+					minimaxImageBaseUrl,
 					experiments,
 					customSupportPrompts,
 				},
@@ -894,8 +918,12 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 								openRouterImageGenerationSelectedModel={
 									openRouterImageGenerationSelectedModel as string | undefined
 								}
+								minimaxImageApiKey={minimaxImageApiKey as string | undefined}
+								minimaxImageBaseUrl={minimaxImageBaseUrl as string | undefined}
 								setImageGenerationProvider={setImageGenerationProvider}
 								setOpenRouterImageApiKey={setOpenRouterImageApiKey}
+								setMinimaxImageApiKey={setMinimaxImageApiKey}
+								setMinimaxImageBaseUrl={setMinimaxImageBaseUrl}
 								setImageGenerationSelectedModel={setImageGenerationSelectedModel}
 							/>
 						)}

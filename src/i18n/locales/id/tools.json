@@ -21,6 +21,7 @@
 	},
 	"generateImage": {
 		"openRouterApiKeyRequired": "Kunci API OpenRouter diperlukan untuk menghasilkan gambar dengan model OpenRouter. Silakan konfigurasikan di pengaturan eksperimental Pembuatan Gambar.",
+		"minimaxApiKeyRequired": "Kunci API MiniMax diperlukan untuk menghasilkan gambar dengan model MiniMax. Silakan konfigurasikan di pengaturan eksperimental Pembuatan Gambar.",
 		"failedWithStatus": "Gagal menghasilkan gambar: {{status}} {{statusText}}",
 		"failedWithMessage": "Gagal menghasilkan gambar: {{message}}",
 		"noImageGenerated": "Tidak ada gambar yang dihasilkan dalam respons",

@@ -795,6 +795,7 @@
 			"modelSelectionLabel": "Model de generació d'imatges",
 			"modelSelectionDescription": "Selecciona el model per a la generació d'imatges",
 			"warningMissingKey": "⚠️ La clau API d'OpenRouter és necessària per a la generació d'imatges. Si us plau, configura-la a dalt.",
+			"warningMissingMinimaxKey": "⚠️ La clau API d'MiniMax és necessària per a la generació d'imatges. Si us plau, configura-la a dalt.",
 			"successConfigured": "✓ La generació d'imatges està configurada i llesta per utilitzar"
 		},
 		"RUN_SLASH_COMMAND": {
