@@ -87,6 +87,21 @@ describe("MiniMaxHandler", () => {
 			expect(model.info).toEqual(minimaxModels[testModelId])
 		})
 
+		it("should return MiniMax-M3 with multimodal and long-context configuration", () => {
+			const testModelId: MinimaxModelId = "MiniMax-M3"
+			const handlerWithModel = new MiniMaxHandler({
+				apiModelId: testModelId,
+				minimaxApiKey: "test-minimax-api-key",
+			})
+			const model = handlerWithModel.getModel()
+			expect(model.id).toBe(testModelId)
+			expect(model.info.contextWindow).toBe(1_000_000)
+			expect(model.info.supportsImages).toBe(true)
+			expect(model.info.inputPrice).toBe(0.6)
+			expect(model.info.outputPrice).toBe(2.4)
+			expect(model.info.cacheReadsPrice).toBe(0.12)
+		})
+
 		it("should return MiniMax-M2.5 model with correct configuration", () => {
 			const testModelId: MinimaxModelId = "MiniMax-M2.5"
 			const handlerWithModel = new MiniMaxHandler({
