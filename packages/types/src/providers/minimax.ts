@@ -128,6 +128,21 @@ export const minimaxModels = {
 		description:
 			"MiniMax M2.1 highspeed: same performance as M2.1 but with faster response (approximately 100 tps vs 60 tps). See pricing at https://platform.minimax.io/docs/guides/pricing-paygo. Requires TokenPlan High-Speed subscription for use with TokenPlan keys. Note: When using TokenPlan, usage is billed per request, not per token.",
 	},
+	"MiniMax-M3.1-Flash": {
+		contextWindow: 1_000_000,
+		supportsImages: true,
+		supportsPromptCache: true,
+		description:
+			"MiniMax M3.1 Flash is a frontier multimodal coding model with a 1M-token context window and native text, image, and video input.",
+	},
+	"MiniMax-M3": {
+		contextWindow: 1_000_000,
+		supportsImages: true,
+		supportsPromptCache: true,
+		supportsReasoningEffort: ["disable", "low", "medium", "high", "xhigh"],
+		description:
+			"MiniMax M3 is a native multimodal model with a 1M-token context window and text, image, and video input. Thinking can be adaptive or disabled.",
+	},
 } as const satisfies Record<string, ModelInfo>
 
 export const minimaxDefaultModelInfo: ModelInfo = minimaxModels[minimaxDefaultModelId]

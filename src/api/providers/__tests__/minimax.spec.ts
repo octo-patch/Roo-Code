@@ -444,6 +444,21 @@ describe("MiniMaxHandler", () => {
 			expect(model.cacheReadsPrice).toBe(0.06)
 		})
 
+		it("should expose MiniMax-M3.1-Flash with multimodal 1M context", () => {
+			const model = minimaxModels["MiniMax-M3.1-Flash"]
+			expect(model.contextWindow).toBe(1_000_000)
+			expect(model.supportsImages).toBe(true)
+			expect(model.supportsPromptCache).toBe(true)
+		})
+
+		it("should expose MiniMax-M3 with adaptive and disabled thinking", () => {
+			const model = minimaxModels["MiniMax-M3"]
+			expect(model.contextWindow).toBe(1_000_000)
+			expect(model.supportsImages).toBe(true)
+			expect(model.supportsPromptCache).toBe(true)
+			expect(model.supportsReasoningEffort).toEqual(["disable", "low", "medium", "high", "xhigh"])
+		})
+
 		it("should correctly configure MiniMax-M2.5-highspeed model properties", () => {
 			const model = minimaxModels["MiniMax-M2.5-highspeed"]
 			expect(model.maxTokens).toBe(16_384)
