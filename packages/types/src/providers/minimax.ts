@@ -8,6 +8,31 @@ export type MinimaxModelId = keyof typeof minimaxModels
 export const minimaxDefaultModelId: MinimaxModelId = "MiniMax-M2.7"
 
 export const minimaxModels = {
+	"MiniMax-M3.1-Flash": {
+		maxTokens: 16_384,
+		contextWindow: 1_000_000,
+		supportsImages: true,
+		supportsPromptCache: true,
+		preserveReasoning: true,
+		inputPrice: 0.15,
+		outputPrice: 0.6,
+		cacheWritesPrice: 0,
+		cacheReadsPrice: 0.015,
+		description:
+			"MiniMax M3.1 Flash, a fast reasoning model with a 1M-token context window and text, image, and video input support.",
+	},
+	"MiniMax-M3": {
+		maxTokens: 16_384,
+		contextWindow: 1_000_000,
+		supportsImages: true,
+		supportsPromptCache: true,
+		inputPrice: 0.3,
+		outputPrice: 1.2,
+		cacheWritesPrice: 0,
+		cacheReadsPrice: 0.06,
+		description:
+			"MiniMax M3, a reasoning model with a 1M-token context window and text, image, and video input support.",
+	},
 	"MiniMax-M2.5": {
 		maxTokens: 16_384,
 		contextWindow: 204_800,
