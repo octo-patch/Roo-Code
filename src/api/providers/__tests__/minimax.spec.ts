@@ -444,6 +444,28 @@ describe("MiniMaxHandler", () => {
 			expect(model.cacheReadsPrice).toBe(0.06)
 		})
 
+		it("should correctly configure MiniMax-M3.1-Flash model properties", () => {
+			const model = minimaxModels["MiniMax-M3.1-Flash"]
+			expect(model.maxTokens).toBe(16_384)
+			expect(model.contextWindow).toBe(1_000_000)
+			expect(model.supportsImages).toBe(true)
+			expect(model.supportsPromptCache).toBe(true)
+			expect(model.inputPrice).toBe(0.15)
+			expect(model.outputPrice).toBe(0.6)
+			expect(model.cacheReadsPrice).toBe(0.015)
+		})
+
+		it("should correctly configure MiniMax-M3 model properties", () => {
+			const model = minimaxModels["MiniMax-M3"]
+			expect(model.maxTokens).toBe(16_384)
+			expect(model.contextWindow).toBe(1_000_000)
+			expect(model.supportsImages).toBe(true)
+			expect(model.supportsPromptCache).toBe(true)
+			expect(model.inputPrice).toBe(0.3)
+			expect(model.outputPrice).toBe(1.2)
+			expect(model.cacheReadsPrice).toBe(0.06)
+		})
+
 		it("should correctly configure MiniMax-M2.5-highspeed model properties", () => {
 			const model = minimaxModels["MiniMax-M2.5-highspeed"]
 			expect(model.maxTokens).toBe(16_384)

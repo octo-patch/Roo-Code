@@ -68,6 +68,36 @@ export const minimaxModels = {
 		description:
 			"MiniMax M2.7 highspeed: same performance as M2.7 but with faster response (approximately 100 tps vs 60 tps). See pricing at https://platform.minimax.io/docs/guides/pricing-paygo. Requires TokenPlan High-Speed subscription for use with TokenPlan keys. Note: When using TokenPlan, usage is billed per request, not per token.",
 	},
+	"MiniMax-M3.1-Flash": {
+		maxTokens: 16_384,
+		contextWindow: 1_000_000,
+		supportsImages: true,
+		supportsPromptCache: true,
+		includedTools: ["search_and_replace"],
+		excludedTools: ["apply_diff"],
+		preserveReasoning: true,
+		inputPrice: 0.15,
+		outputPrice: 0.6,
+		cacheWritesPrice: undefined,
+		cacheReadsPrice: 0.015,
+		description:
+			"MiniMax M3.1 Flash, a fast model for agentic workflows. See https://platform.minimax.io/docs/guides/models-intro.md and https://platform.minimax.io/docs/pricing/overview.md.",
+	},
+	"MiniMax-M3": {
+		maxTokens: 16_384,
+		contextWindow: 1_000_000,
+		supportsImages: true,
+		supportsPromptCache: true,
+		includedTools: ["search_and_replace"],
+		excludedTools: ["apply_diff"],
+		preserveReasoning: true,
+		inputPrice: 0.3,
+		outputPrice: 1.2,
+		cacheWritesPrice: undefined,
+		cacheReadsPrice: 0.06,
+		description:
+			"MiniMax M3, a multimodal reasoning model for agentic workflows. See https://platform.minimax.io/docs/guides/models-intro.md and https://platform.minimax.io/docs/pricing/overview.md.",
+	},
 	"MiniMax-M2": {
 		maxTokens: 16_384,
 		contextWindow: 204_800,
