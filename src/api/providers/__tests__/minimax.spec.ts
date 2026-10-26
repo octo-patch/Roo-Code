@@ -76,6 +76,21 @@ describe("MiniMaxHandler", () => {
 			expect(model.info).toEqual(minimaxModels[minimaxDefaultModelId])
 		})
 
+		it("should expose the current flagship models", () => {
+			expect(minimaxModels["MiniMax-M3.1-Flash"]).toMatchObject({
+				contextWindow: 1_000_000,
+				supportsImages: true,
+				inputPrice: 0.15,
+				outputPrice: 0.6,
+			})
+			expect(minimaxModels["MiniMax-M3"]).toMatchObject({
+				contextWindow: 1_000_000,
+				supportsImages: true,
+				inputPrice: 0.3,
+				outputPrice: 1.2,
+			})
+		})
+
 		it("should return specified model when valid model is provided", () => {
 			const testModelId: MinimaxModelId = "MiniMax-M2"
 			const handlerWithModel = new MiniMaxHandler({
@@ -191,10 +206,10 @@ describe("MiniMaxHandler", () => {
 			expect(model.info).toEqual(minimaxModels[minimaxDefaultModelId])
 		})
 
-		it("should default to MiniMax-M2.7 model", () => {
+		it("should default to MiniMax-M3.1-Flash model", () => {
 			const handlerDefault = new MiniMaxHandler({ minimaxApiKey: "test-minimax-api-key" })
 			const model = handlerDefault.getModel()
-			expect(model.id).toBe("MiniMax-M2.7")
+			expect(model.id).toBe("MiniMax-M3.1-Flash")
 		})
 	})
 
