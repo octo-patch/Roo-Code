@@ -6,8 +6,37 @@ import type { ModelInfo } from "../model.js"
 // https://platform.minimax.io/docs/guides/pricing-tokenplan
 export type MinimaxModelId = keyof typeof minimaxModels
 export const minimaxDefaultModelId: MinimaxModelId = "MiniMax-M2.7"
+export const MINIMAX_DEFAULT_MAX_TOKENS = 16_384
 
 export const minimaxModels = {
+	"MiniMax-M3.1-Flash": {
+		maxTokens: MINIMAX_DEFAULT_MAX_TOKENS,
+		contextWindow: 1_000_000,
+		supportsImages: true,
+		supportsPromptCache: true,
+		preserveReasoning: true,
+		inputPrice: 0.15,
+		outputPrice: 0.6,
+		cacheWritesPrice: undefined,
+		cacheReadsPrice: 0.015,
+	},
+	"MiniMax-M3": {
+		maxTokens: MINIMAX_DEFAULT_MAX_TOKENS,
+		contextWindow: 1_000_000,
+		supportsImages: true,
+		supportsPromptCache: true,
+		preserveReasoning: true,
+		inputPrice: 0.3,
+		outputPrice: 1.2,
+		cacheWritesPrice: undefined,
+		cacheReadsPrice: 0.06,
+		longContextPricing: {
+			thresholdTokens: 512_000,
+			inputPriceMultiplier: 2,
+			outputPriceMultiplier: 2,
+			cacheReadsPriceMultiplier: 2,
+		},
+	},
 	"MiniMax-M2.5": {
 		maxTokens: 16_384,
 		contextWindow: 204_800,
@@ -132,5 +161,4 @@ export const minimaxModels = {
 
 export const minimaxDefaultModelInfo: ModelInfo = minimaxModels[minimaxDefaultModelId]
 
-export const MINIMAX_DEFAULT_MAX_TOKENS = 16_384
 export const MINIMAX_DEFAULT_TEMPERATURE = 1.0
