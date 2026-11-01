@@ -396,6 +396,23 @@ describe("MiniMaxHandler", () => {
 	})
 
 	describe("Model Configuration", () => {
+		it.each([
+			["MiniMax-M3.1-Flash", 0.15, 0.6, 0.015],
+			["MiniMax-M3", 0.3, 1.2, 0.06],
+		] as const)(
+			"should correctly configure %s model properties",
+			(modelId, inputPrice, outputPrice, cacheReadsPrice) => {
+				const model = minimaxModels[modelId]
+				expect(model.contextWindow).toBe(1_000_000)
+				expect(model.supportsImages).toBe(true)
+				expect(model.supportsPromptCache).toBe(true)
+				expect(model.preserveReasoning).toBe(true)
+				expect(model.inputPrice).toBe(inputPrice)
+				expect(model.outputPrice).toBe(outputPrice)
+				expect(model.cacheReadsPrice).toBe(cacheReadsPrice)
+			},
+		)
+
 		it("should correctly configure MiniMax-M2 model properties", () => {
 			const model = minimaxModels["MiniMax-M2"]
 			expect(model.maxTokens).toBe(16_384)
