@@ -9,7 +9,7 @@ export const minimaxDefaultModelId: MinimaxModelId = "MiniMax-M2.7"
 
 export const minimaxModels = {
 	"MiniMax-M3.1-Flash": {
-		maxTokens: 16_384,
+		maxTokens: undefined,
 		contextWindow: 1_000_000,
 		supportsImages: true,
 		supportsPromptCache: true,
@@ -21,10 +21,10 @@ export const minimaxModels = {
 		cacheWritesPrice: undefined,
 		cacheReadsPrice: 0.015,
 		description:
-			"MiniMax M3.1 Flash supports adaptive reasoning, multimodal input, and a one-million-token context window. See pricing at https://platform.minimax.io/docs/pricing/overview.",
+			"MiniMax M3.1 Flash, a fast model with adaptive reasoning and a one-million-token context window. See pricing at https://platform.minimax.io/docs/pricing/overview.",
 	},
 	"MiniMax-M3": {
-		maxTokens: 16_384,
+		maxTokens: undefined,
 		contextWindow: 1_000_000,
 		supportsImages: true,
 		supportsPromptCache: true,
@@ -36,7 +36,7 @@ export const minimaxModels = {
 		cacheWritesPrice: undefined,
 		cacheReadsPrice: 0.06,
 		description:
-			"MiniMax M3 supports adaptive reasoning, multimodal input, and a one-million-token context window. See pricing at https://platform.minimax.io/docs/pricing/overview.",
+			"MiniMax M3, a model with optional adaptive reasoning and a one-million-token context window. See pricing at https://platform.minimax.io/docs/pricing/overview.",
 	},
 	"MiniMax-M2.5": {
 		maxTokens: 16_384,
