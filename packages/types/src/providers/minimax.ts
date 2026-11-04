@@ -2,12 +2,41 @@ import type { ModelInfo } from "../model.js"
 
 // Minimax
 // https://platform.minimax.io/docs/guides/models-intro
-// https://platform.minimax.io/docs/guides/pricing-paygo
+// https://platform.minimax.io/docs/pricing/overview.md
 // https://platform.minimax.io/docs/guides/pricing-tokenplan
 export type MinimaxModelId = keyof typeof minimaxModels
 export const minimaxDefaultModelId: MinimaxModelId = "MiniMax-M2.7"
 
 export const minimaxModels = {
+	"MiniMax-M3.1-Flash": {
+		maxTokens: 16_384,
+		contextWindow: 1_000_000,
+		supportsImages: true,
+		supportsPromptCache: true,
+		includedTools: ["search_and_replace"],
+		excludedTools: ["apply_diff"],
+		preserveReasoning: true,
+		inputPrice: 0.15,
+		outputPrice: 0.6,
+		cacheWritesPrice: undefined,
+		cacheReadsPrice: 0.015,
+		description:
+			"MiniMax M3.1 Flash supports long-context agentic workloads with adaptive reasoning and multimodal input.",
+	},
+	"MiniMax-M3": {
+		maxTokens: 16_384,
+		contextWindow: 1_000_000,
+		supportsImages: true,
+		supportsPromptCache: true,
+		includedTools: ["search_and_replace"],
+		excludedTools: ["apply_diff"],
+		preserveReasoning: true,
+		inputPrice: 0.3,
+		outputPrice: 1.2,
+		cacheWritesPrice: undefined,
+		cacheReadsPrice: 0.06,
+		description: "MiniMax M3 supports long-context agentic workloads with adaptive reasoning and multimodal input.",
+	},
 	"MiniMax-M2.5": {
 		maxTokens: 16_384,
 		contextWindow: 204_800,
