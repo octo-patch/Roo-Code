@@ -8,6 +8,36 @@ export type MinimaxModelId = keyof typeof minimaxModels
 export const minimaxDefaultModelId: MinimaxModelId = "MiniMax-M2.7"
 
 export const minimaxModels = {
+	"MiniMax-M3.1-Flash": {
+		maxTokens: null,
+		contextWindow: 1_000_000,
+		supportsImages: true,
+		supportsPromptCache: true,
+		includedTools: ["search_and_replace"],
+		excludedTools: ["apply_diff"],
+		preserveReasoning: true,
+		inputPrice: 0.15,
+		outputPrice: 0.6,
+		cacheWritesPrice: undefined,
+		cacheReadsPrice: 0.015,
+		description:
+			"MiniMax M3.1 Flash is a high-speed multimodal model with a 1M-token context window and always-on adaptive thinking.",
+	},
+	"MiniMax-M3": {
+		maxTokens: null,
+		contextWindow: 1_000_000,
+		supportsImages: true,
+		supportsPromptCache: true,
+		includedTools: ["search_and_replace"],
+		excludedTools: ["apply_diff"],
+		preserveReasoning: true,
+		inputPrice: 0.3,
+		outputPrice: 1.2,
+		cacheWritesPrice: undefined,
+		cacheReadsPrice: 0.06,
+		description:
+			"MiniMax M3 is a multimodal flagship model with a 1M-token context window and adaptive thinking. Baseline pricing applies to standard requests up to the published 512k input-token threshold.",
+	},
 	"MiniMax-M2.5": {
 		maxTokens: 16_384,
 		contextWindow: 204_800,
