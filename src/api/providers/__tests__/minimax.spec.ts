@@ -87,6 +87,19 @@ describe("MiniMaxHandler", () => {
 			expect(model.info).toEqual(minimaxModels[testModelId])
 		})
 
+		it.each(["MiniMax-M3.1-Flash", "MiniMax-M3"] as const)(
+			"should route requests to the %s model",
+			(testModelId) => {
+				const handlerWithModel = new MiniMaxHandler({
+					apiModelId: testModelId,
+					minimaxApiKey: "test-minimax-api-key",
+				})
+				const model = handlerWithModel.getModel()
+				expect(model.id).toBe(testModelId)
+				expect(model.info).toEqual(minimaxModels[testModelId])
+			},
+		)
+
 		it("should return MiniMax-M2.5 model with correct configuration", () => {
 			const testModelId: MinimaxModelId = "MiniMax-M2.5"
 			const handlerWithModel = new MiniMaxHandler({
@@ -396,6 +409,23 @@ describe("MiniMaxHandler", () => {
 	})
 
 	describe("Model Configuration", () => {
+		it.each([
+			["MiniMax-M3.1-Flash", 0.15, 0.6, 0.015],
+			["MiniMax-M3", 0.3, 1.2, 0.06],
+		] as const)(
+			"should correctly configure %s model properties",
+			(modelId, inputPrice, outputPrice, cacheReadsPrice) => {
+				const model = minimaxModels[modelId]
+				expect(model.contextWindow).toBe(1_000_000)
+				expect(model.supportsImages).toBe(true)
+				expect(model.supportsPromptCache).toBe(true)
+				expect(model.preserveReasoning).toBe(true)
+				expect(model.inputPrice).toBe(inputPrice)
+				expect(model.outputPrice).toBe(outputPrice)
+				expect(model.cacheReadsPrice).toBe(cacheReadsPrice)
+			},
+		)
+
 		it("should correctly configure MiniMax-M2 model properties", () => {
 			const model = minimaxModels["MiniMax-M2"]
 			expect(model.maxTokens).toBe(16_384)
