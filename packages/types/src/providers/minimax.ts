@@ -5,9 +5,38 @@ import type { ModelInfo } from "../model.js"
 // https://platform.minimax.io/docs/guides/pricing-paygo
 // https://platform.minimax.io/docs/guides/pricing-tokenplan
 export type MinimaxModelId = keyof typeof minimaxModels
-export const minimaxDefaultModelId: MinimaxModelId = "MiniMax-M2.7"
+export const minimaxDefaultModelId: MinimaxModelId = "MiniMax-M3.1-Flash"
 
 export const minimaxModels = {
+	"MiniMax-M3.1-Flash": {
+		maxTokens: 524_288,
+		contextWindow: 1_000_000,
+		supportsImages: true,
+		supportsPromptCache: false,
+		includedTools: ["search_and_replace"],
+		excludedTools: ["apply_diff"],
+		preserveReasoning: true,
+		inputPrice: 0.15,
+		outputPrice: 0.6,
+		cacheWritesPrice: undefined,
+		cacheReadsPrice: 0.015,
+		description:
+			"MiniMax M3.1 Flash is a frontier multimodal coding model with a 1M-token context window and tunable thinking depth.",
+	},
+	"MiniMax-M3": {
+		maxTokens: 524_288,
+		contextWindow: 1_000_000,
+		supportsImages: true,
+		supportsPromptCache: false,
+		includedTools: ["search_and_replace"],
+		excludedTools: ["apply_diff"],
+		preserveReasoning: true,
+		inputPrice: 0.3,
+		outputPrice: 1.2,
+		cacheWritesPrice: undefined,
+		cacheReadsPrice: 0.06,
+		description: "MiniMax M3 is a frontier multimodal coding model with a 1M-token context window.",
+	},
 	"MiniMax-M2.5": {
 		maxTokens: 16_384,
 		contextWindow: 204_800,
